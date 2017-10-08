@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/grass in wind.unity
+  isLoaded: 1
+  isActive: 1
