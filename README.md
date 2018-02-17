@@ -10,7 +10,6 @@ which seems that the hair grows from the mesh!
 ![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/hair.jpg)
 ### Inspect Panel
 ![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/material.png)  
-### There are many arguments that can be adjusted.
 #### different gravity weight
 ![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/gravity.jpg)
 #### different density value
