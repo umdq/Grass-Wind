@@ -194,11 +194,11 @@
 
 				//fixed randomization
 				float2 rootTerrainUV=(i[0].terrainUV+i[1].terrainUV+i[2].terrainUV)/3.0f;
-				float r=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0,0.111), 0, 0)).r;
-				float g=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0.253,0.679), 0, 0)).r;
-				float b=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0.333,0.238), 0, 0)).r;
-				float3 noiseNormal=float3(r,g,b)*2-1;
-				//float3 noiseNormal=tex2Dlod(_NoiseTex, float4(root.xz * _NoiseSampleScale + float2(_NoiseSampleBias,_NoiseSampleBias), 0, 0)).rgb*2-1;
+				//float r=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0,0.111), 0, 0)).r;
+				//float g=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0.253,0.679), 0, 0)).r;
+				//float b=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(0.333,0.238), 0, 0)).r;
+				//float3 noiseNormal=float3(r,g,b)*2-1;
+				float3 noiseNormal=tex2Dlod(_NoiseTex, float4(rootTerrainUV * _NoiseSampleScale + float2(_NoiseSampleBias,_NoiseSampleBias), 0, 0)).rgb*2-1;
 				float currentLength=_Length+noiseNormal.x * _LengthIntensity;
 
 				//noiseNormal=normalize(noiseNormal);//不知道怎么回事，normalize后效果会很规则
@@ -207,7 +207,7 @@
 				//找到分割线的原因了！noiseNormal的x&z不知怎的一直是同正负性
 				//noiseNormal.x*=-1;//果然斜纹方向改变！
 				//进一步debug发现，xyz都大于0占大多数
-				//——》问题出在noise texture本身！CTMD是单通道的！
+				//——》问题出在noise texture本身！CTMD是单通道的！——》white noise当然只有一个灰度显示！应该colorful noise！
 
 				float3 noiseOri=noiseNormal * _OrientationIntensity;
 				tangentW+=float4(noiseOri,0.0f);
@@ -223,8 +223,8 @@
 				windDir=normalize(windDir);
 				float windForce=lerp(_WindMin, _WindMax, (sin(_Time.w*_WindFrequency)+1)*0.5f);
 				float3 wind=windDir*windForce;
-				stalkDir=normalize(stalkDir+float4(noiseDir,0.0f)+float4(wind,0.0f) );
-				//stalkDir=normalize(stalkDir+float4(noiseDir,0.0f));
+				//stalkDir=normalize(stalkDir+float4(noiseDir,0.0f)+float4(wind,0.0f) );
+				stalkDir=normalize(stalkDir+float4(noiseDir,0.0f));
 
 				//offset root tinily to resist coherence
 				//root.xyz=root.xyz+_OffsetMax*(noiseCol.r*2-1)*normalize(_OffsetDir.xyz);
@@ -232,10 +232,10 @@
 				for(int i=0;i<=NUM_STEP;i++)
 				{
 					//percentage
-					float t = (float)i /NUM_STEP;;
+					float t = (float)i /NUM_STEP;
 
     				//center point
-    				float4 stepStalk=normalize(stalkDir - (float4(0,  t, 0, 0) * _Gravity * t));
+    				float4 stepStalk=normalize(stalkDir - float4(0,  t* t* _Gravity, 0, 0) +float4(t*wind,0) );
     				float4 c = root+stepStalk* (currentLength * t);
 
     				float4 p0=c+_Width*tangentW;
