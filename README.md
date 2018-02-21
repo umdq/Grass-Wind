@@ -15,7 +15,7 @@ which seems that the hair grows from the mesh!
 #### Different Density Value
 ![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/density.jpg)
 ## Run Result
-![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/grass_wave.gif)
+![](https://github.com/EagerCleaverInWind/Grass-Wind/blob/master/Grass%26Wind/screenshots/grass_wave2.gif)
 ## To Do List
 * Efficient lighting & shadow
 * Interaction with any collider
